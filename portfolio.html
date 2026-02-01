@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riley Moen | Applied Mathematician & ML Engineer</title>
+    <title>Riley Moen | Applied Mathematician & Data Scientist</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,7 +17,7 @@
             --text-primary: #e5e7eb;
             --text-secondary: #9ca3af;
             --text-dim: #6b7280;
-            --grid-color: rgba(0, 212, 255, 0.08);
+            --grid-color: rgba(0, 212, 255, 0.15);
             --glow: rgba(0, 212, 255, 0.3);
         }
 
@@ -35,18 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* Neural Network Background */
-        .neural-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
+        /* Background layers with proper z-indexing */
         .grid-overlay {
             position: fixed;
             top: 0;
@@ -57,19 +46,29 @@
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 60px 60px;
-            z-index: 0;
+            z-index: 1;
             pointer-events: none;
             animation: gridPulse 8s ease-in-out infinite;
         }
 
         @keyframes gridPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .content-wrapper {
             position: relative;
-            z-index: 1;
+            z-index: 10;
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 2rem;
@@ -88,6 +87,11 @@
         .hero-content {
             animation: fadeSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
         }
 
         @keyframes fadeSlideUp {
@@ -217,6 +221,13 @@
         .section-header {
             margin-bottom: 5rem;
             text-align: center;
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            display: inline-block;
+            width: 100%;
         }
 
         .section-label {
@@ -243,8 +254,9 @@
         }
 
         .skill-category {
-            background: var(--surface);
-            border: 1px solid rgba(0, 212, 255, 0.1);
+            background: rgba(21, 27, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             border-radius: 12px;
             padding: 2.5rem;
             position: relative;
@@ -311,6 +323,11 @@
             max-width: 900px;
             margin: 0 auto;
             position: relative;
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
         }
 
         .education-timeline::before {
@@ -378,8 +395,9 @@
         }
 
         .project-card {
-            background: var(--surface);
-            border: 1px solid rgba(0, 212, 255, 0.1);
+            background: rgba(21, 27, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             border-radius: 12px;
             padding: 3rem;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -450,7 +468,9 @@
 
         /* Contact Section */
         #contact {
-            background: linear-gradient(135deg, var(--surface), var(--surface-light));
+            background: rgba(21, 27, 45, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             border-radius: 20px;
             padding: 6rem 4rem;
             text-align: center;
@@ -582,7 +602,7 @@
                 <div class="section-label">About</div>
                 <h2>Data Science Meets Mathematical Rigor</h2>
             </div>
-            <div style="max-width: 900px; margin: 0 auto; font-size: 1.15rem; color: var(--text-secondary); line-height: 1.9;">
+            <div style="max-width: 900px; margin: 0 auto; font-size: 1.15rem; color: var(--text-secondary); line-height: 1.9; background: rgba(10, 14, 23, 0.85); backdrop-filter: blur(10px); padding: 3rem; border-radius: 16px; border: 1px solid rgba(0, 212, 255, 0.1);">
                 <p style="margin-bottom: 1.5rem;">
                     I'm a 22-year-old applied mathematician with a unique journey from concurrent high school 
                     and college studies to earning a Master's degree in Applied Mathematics. My expertise lies 
@@ -814,20 +834,24 @@
         const canvas = document.getElementById('neuralCanvas');
         const ctx = canvas.getContext('2d');
         
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
 
         const nodes = [];
-        const nodeCount = 40;
+        const nodeCount = 60;
         const maxDistance = 200;
 
         class Node {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 3 + 2;
             }
 
             update() {
@@ -839,13 +863,18 @@
             }
 
             draw() {
+                ctx.save();
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(0, 212, 255, 0.5)';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 212, 255, 0.6)';
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.7)';
                 ctx.fill();
+                ctx.restore();
             }
         }
 
+        // Create nodes
         for (let i = 0; i < nodeCount; i++) {
             nodes.push(new Node());
         }
@@ -861,8 +890,9 @@
                         ctx.beginPath();
                         ctx.moveTo(nodes[i].x, nodes[i].y);
                         ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.2 * (1 - distance / maxDistance)})`;
-                        ctx.lineWidth = 0.5;
+                        const opacity = 0.3 * (1 - distance / maxDistance);
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+                        ctx.lineWidth = 1;
                         ctx.stroke();
                     }
                 }
@@ -885,8 +915,7 @@
         animate();
 
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            resizeCanvas();
         });
 
         // Smooth scroll
